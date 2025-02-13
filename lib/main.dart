@@ -112,6 +112,17 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void _scrollAndFocus() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    });
+  }
+
   Future<void> getGeminiResponse() async {
     final userMessage = _textController.text;
     setState(() {
@@ -191,15 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
                 _isLoading = false;
               });
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                _focusNode.requestFocus();
-                _scrollController.animateTo(
-                  _scrollController.position.maxScrollExtent,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeOut,
-                );
-              });
-
+              _scrollAndFocus();
               printHistory();
               return;
             }
@@ -211,14 +214,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 _messages.add(Message(myFunctionResult, false));
                 _isLoading = false;
               });
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                _focusNode.requestFocus();
-                _scrollController.animateTo(
-                  _scrollController.position.maxScrollExtent,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeOut,
-                );
-              });
+              _scrollAndFocus();
               printHistory();
               return;
             }
@@ -229,14 +225,7 @@ class _MyHomePageState extends State<MyHomePage> {
           _messages.add(Message(response.text ?? 'No response', false));
           _isLoading = false;
         });
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          _focusNode.requestFocus();
-          _scrollController.animateTo(
-            _scrollController.position.maxScrollExtent,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOut,
-          );
-        });
+        _scrollAndFocus();
         printHistory();
       }
     } catch (e) {
